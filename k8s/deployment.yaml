@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finance-manager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: finance-manager
+  template:
+    metadata:
+      labels:
+        app: finance-manager
+    spec:
+      containers:
+        - name: finance-manager
+          image: kavya107/finance-manager:1.0
+          ports:
+            - containerPort: 3000
