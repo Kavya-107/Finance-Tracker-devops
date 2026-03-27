@@ -1,22 +1,36 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "kavya107/finance-manager:1.0"
+    }
+
     stages {
-        stage('Clone') {
-            steps {
-                git 'https://github.com/Kavya-107/Finance-Tracker-devops.git'
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t finance-tracker .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
-        stage('Run Container') {
+        stage('Login to Docker Hub') {
             steps {
-                sh 'docker run -d -p 3000:3000 finance-tracker'
+                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh 'docker push $DOCKER_IMAGE'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f k8s/deployment.yaml'
+                sh 'kubectl apply -f k8s/service.yaml'
             }
         }
     }
