@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Clone Repo') {
+        stage('Clone') {
             steps {
                 git 'https://github.com/Kavya-107/Finance-Tracker-devops.git'
             }
@@ -20,6 +19,5 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 finance-tracker'
             }
         }
-
     }
 }
