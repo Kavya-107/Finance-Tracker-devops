@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
+        stage('Clone Repo') {
             steps {
                 git 'https://github.com/Kavya-107/Finance-Tracker-devops.git'
             }
@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Container') {
             steps {
                 sh 'docker run -d -p 3000:3000 finance-tracker'
             }
